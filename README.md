@@ -40,14 +40,13 @@ Validation_image can be run after traing completes, using saved checkpoints.  I'
 
 
 ## Basic script info:
-Uses accelerate with fully sharded data parallel (FSDP), fine-tunes an sdxl model with a minimum of 2 24GB gpus. It may work with 2 20/22GB gpus, that's for you to test.
-
+Uses accelerate with deepspeed zero stage 1, fine-tunes an sdxl model with a minimum of 1 9GB GPU (theoretical, tested with 12GB). Also, can train with multi-gpu
 
 Further info: sdxl_trainer
 - designed for large scale, large data set training
 - it's assumed that you're willing to do what needs to be done to train an awesome model
-- tested on Ubuntu 22.04 with 2 rtx3090s
-- at 1024 resolution, with rtx3090s, ~1.45imgs/sec per rtx3090
+- tested on Ubuntu 22.04 with rtx3090, rtx4090, & briefly testd with rtx2060 12GB
+- at 1024 resolution, with rtx3090, 1.5-2.0imgs/sec per rtx3090
 
 Features:
 - accelerate deepspeed zero stage 1 with cp offset
@@ -57,8 +56,7 @@ Features:
 	- Adagrad8bit, Lion8bit: could be added with simple code change
         - Adafactor: should work with deepspeed
         	- FSDP initial tests showed Cuda OOM, required 1/2 batch size to not OOM
-- save & load unet: saves un-sharded trained unet to disk, load & re-shard unet to continue training
-	- accelerator.save_state is nonfunctional due to BNB incompatibility with FSDP, wait for BNB to issue fix
+- save_state & load_state
 - save pipeline as fp16
 - sample image generation = 1st row is base_model + new sample_images appended below
 - progress bar - it/sec, imgs/sec, loss
@@ -109,9 +107,6 @@ Suggested Training Parameters (though not tested), assuming a very large data se
 
 
 Important
-- current script uses linux ram drive ("/dev/shm/") to temporally to store unet/pipeline (~10GB) when transferring between processes
-	- if you want to use this script with without using a ram drive, or on other operating systems, you'll need to modify this
-	- I'll add an arg to modify this later
 - data set caching resolution range & training resolution range must be the same!
 - site-packages/basicsr/data/degradations.py
 	- change torchvision.transforms.functional_tensor to torchvision.transforms.functional
