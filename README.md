@@ -31,6 +31,9 @@ Training Environment:
 
 This script has not been tested in any other environment, and there are no plans to.
 
+
+Now that it uses deepspeed, it probably doesn't work in windows.  If you know how to use accelerate FSDP 1 gpu w/ cpu offset, it is very easy to convert this script to FSDP, which may work with windows.
+
 ##IMPORTANT WARNING
 Validation_image has a memory leak, most likely from HPSv2.  Therefore do not use it (set config: validation_image = null).
 Validation_image can be run after traing completes, using saved checkpoints.  I'll upload instructions on how to do so later.
