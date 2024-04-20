@@ -1,0 +1,5 @@
+#RealESRGANer & GFPGAN
+#they install tensorboard nightly, which we don't want
+basicsr
+realesrgan
+gfpgan

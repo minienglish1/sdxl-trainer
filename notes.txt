@@ -1,0 +1,2 @@
+sdxl fine-tune confirmed lr:
+1024, 46 images, bsz 14 5e-7 & 1e-6
